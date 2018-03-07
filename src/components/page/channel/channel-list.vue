@@ -52,6 +52,11 @@
 					    </template>
 					   <!--  <div style="padding:0 30px;"> -->
 						<el-table :data="item.channeList" border>
+						    <el-table-column label="序号" :width="columnWidth">
+								<template scope="scope">
+									{{ scope.$index+1 }}
+								</template>
+							</el-table-column>
 							<el-table-column prop="channel.name" label="接入支付渠道">
 							</el-table-column>
 							<el-table-column prop="merchantNo" label="商户号">
