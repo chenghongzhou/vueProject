@@ -71,6 +71,9 @@
 											<div class="cell">限额</div>
 										</th>
 										<th>
+											<div class="cell">限额状态</div>
+										</th>
+										<th>
 											<div class="cell">接入状态</div>
 										</th>
 										<th>
@@ -95,6 +98,16 @@
 										</td>
 										<td>
 											<div class="cell">{{'￥'+Number(items.upperBound/100).toFixed(2) || '0.00'}}</div>
+										</td>
+										<td>
+											<div class="cell">
+												<div class="status_suc_bgcolor" v-if="items.isThreshoId==2">
+													可用
+												</div>
+												<div class="status_fail_bgcolor" v-else>
+													已超额
+												</div>
+											</div>
 										</td>
 										<td>
 											<div class="cell">
@@ -145,7 +158,7 @@
 								</div>
 								<a href="javascript:;" class="right" @click="handleAdd(key)">+添加渠道</a>
 							</div>
-						
+
 							<div class="table_list">
 								<table cellpadding="0" cellspacing="0">
 									<tr style="height: 100px;">
@@ -158,14 +171,14 @@
 								</table>
 							</div>
 						</div>
-							<!--<span v-if="key==1">暂无平台支付数据</span>
+						<!--<span v-if="key==1">暂无平台支付数据</span>
 							<span v-if="key==2">暂无快捷支付数据</span>
 							<span v-if="key==3">暂无银行支付数据</span>
 							<span v-if="key==4">暂无条形码支付数据</span>
 							<span v-if="key==5">暂无代付数据</span>
 							<span v-if="key==6">暂无网关支付数据</span>
 							<span v-if="key==7">暂无wap支付数据</span>-->
-							
+
 						<!-- 列表 end -->
 					</div>
 				</div>
@@ -251,6 +264,16 @@
 					<el-table-column prop="upperBound" label="单日限额（元）">
 						<template scope="scope">
 							<input type="text" v-model="scope.row.upperBound" @change="_upper(scope.row.upperBound)" onkeypress="return event.keyCode>=48&&event.keyCode<=57" ref="uper">
+						</template>
+					</el-table-column>
+					<el-table-column prop="status" label="状态">
+						<template scope="scope">
+							<div class="status_suc_bgcolor" v-if="scope.row.status==2">
+								可用
+							</div>
+							<div class="status_fail_bgcolor" v-else>
+								已超额
+							</div>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -461,7 +484,7 @@
 							url: common.apihost + 'systemChannel/add',
 							data: {
 								data: {
-									systemCode:this.$router.history.current.query.systemCode,
+									systemCode: this.$router.history.current.query.systemCode,
 									merchant_account_id: this.$router.history.current.query.id,
 									clientTypes: this.createForm.typePay,
 									merchantId: this.createForm.merchantName,

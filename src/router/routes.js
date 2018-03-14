@@ -132,7 +132,6 @@ let routes = [
 			{
 				path: '/flow-count',
 				component: flowCount,
-				name: '渠道交易统计表'
 			},{
 				path: '/account-list',
 				component: accountList,
