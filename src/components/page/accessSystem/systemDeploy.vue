@@ -269,7 +269,7 @@
 					</el-table-column>
 					<el-table-column prop="upperBound" label="单日限额（元）">
 						<template scope="scope">
-							<input type="text" v-model="scope.row.upperBound" @change="_upper(scope.row.upperBound)" onkeypress="return event.keyCode>=48&&event.keyCode<=57" ref="uper">
+							<input type="text" disabled="disabled" v-model="scope.row.upperBound" @change="_upper(scope.row.upperBound)" onkeypress="return event.keyCode>=48&&event.keyCode<=57" ref="uper">
 						</template>
 					</el-table-column>
 					<el-table-column prop="status" label="状态">

@@ -31,7 +31,7 @@ function errorState(response) {
 			confirmButtonText: '确定'
 		}).then(() => {
 			localStorage.removeItem('user');
-			window.location.href = '/';
+			window.location.href = '/upay-client/#/';
 		});
 	}
 

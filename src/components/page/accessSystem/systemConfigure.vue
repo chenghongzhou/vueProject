@@ -238,9 +238,10 @@
 				this.updateForm.id = id;
 				this.updateForm.name = name;
 				this.updateForm.url = url;
-				this.updateForm.secretUrl = image.match(/accessSystem(\S*)/)[0];
-				if(!!this.updateForm.secretUrl) {
-					this.updateForm.secretFile='已上传';
+				if(!!image) {
+					return false;
+				}else {
+					this.updateForm.secretUrl = image.match(/accessSystem(\S*)/)[0];
 				}
 			},
 			updateSys() {
@@ -288,11 +289,15 @@
 					if(fileSize < 1024 * 1024 * 3) {
 						axios.post(url, data, {
 							headers: {
-								"Content-Type": "multipart/form-data "
+								"Content-Type": "multipart/form-data"
 							},
 						}).then((response) => {
-							this.createForm.secretFile = '上传成功';
-							this.createForm.secretUrl = response.data.data;
+							if(response.data.code==1){
+								this.createForm.secretFile = '上传成功';
+								this.createForm.secretUrl = response.data.data;
+							}else {
+								this.createForm.secretFile = '上传失败';
+							}
 						}).then((error) => this.error = error)
 					} else {
 						this.$alert('附件必须不能大于3M', '提示信息', {
@@ -322,8 +327,12 @@
 								"Content-Type": "multipart/form-data "
 							},
 						}).then((response) => {
-							this.updateForm.secretFile = '上传成功';
-							this.updateForm.secretUrl = response.data.data;
+							if(response.data.code==1){
+								this.updateForm.secretFile = '上传成功';
+								this.updateForm.secretUrl = response.data.data;
+							}else {
+								this.updateForm.secretFile = '上传失败';
+							}
 						}).then((error) => this.error = error)
 					} else {
 						this.$alert('附件必须不能大于3M', '提示信息', {
