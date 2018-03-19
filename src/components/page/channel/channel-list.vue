@@ -66,7 +66,7 @@
 							</el-table-column>
 							<el-table-column prop="upperBound" label="交易限额">
 								<template scope="scope">
-									{{'￥'+Number(scope.row.upperBound).toFixed(2) || '￥0.00'}}
+									{{'￥'+Number(scope.row.upperBound).toFixed(2) || '--'}}
 								</template>
 							</el-table-column>
 							<el-table-column prop="createTime" :formatter="dateFormat" label="添加时间">

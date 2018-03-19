@@ -68,7 +68,10 @@
 											<div class="cell">系统授权编码</div>
 										</th>
 										<th>
-											<div class="cell">限额</div>
+											<div class="cell">单日限额(元)</div>
+										</th>
+										<th>
+											<div class="cell">单笔限额(元)</div>
 										</th>
 										<th>
 											<div class="cell">限额状态</div>
@@ -97,11 +100,14 @@
 											<div class="cell">{{items.accessKey}}</div>
 										</td>
 										<td>
-											<div class="cell">{{'￥'+Number(items.upperBound/100).toFixed(2) || '0.00'}}</div>
+											<div class="cell">{{Number(items.upperBound/100).toFixed(2) || '--'}}</div>
+										</td>
+										<td>
+											<div class="cell">{{items.single_limit||'--'}}</div>
 										</td>
 										<td>
 											<div class="cell">
-												<div class="status_suc_bgcolor" v-if="items.isThreshoId==2">
+												<div class="status_suc_bgcolor" v-if="items.isThreshold==2">
 													可用
 												</div>
 												<div class="status_fail_bgcolor" v-else>
@@ -208,7 +214,7 @@
 				<div class="detail-item"><label class="item-label">接入支付渠道：</label><span>{{ detailInfo.channel.name || '--' }}</span></div>
 				<div class="detail-item"><label class="item-label">系统授权编码：</label><span>{{ detailInfo.accessSystem.accessKey || '--' }}</span></div>
 				<div class="bd-line"></div>
-				<div class="detail-item"><label class="item-label">状态：</label>
+				<div class="detail-item"><label class="item-label">接入状态：</label>
 					<span v-if="detailInfo.status == 1">启用</span>
 					<span v-else>停用</span>
 				</div>
@@ -276,7 +282,8 @@
 							</div>
 						</template>
 					</el-table-column>
-				</el-table>
+				</el-table><br/>
+				<div style="text-align: left;">&nbsp;单笔限额：{{'￥'+Number(singleLimit).toFixed(2)||'0.00'}}</div>
 				<el-form-item style="margin-top:30px;">
 					<el-button type="primary" @click="createConfig">保存</el-button>
 					<el-button @click="dialogConfigVisible = false">取消</el-button>
@@ -340,6 +347,7 @@
 				isLimitHour: false,
 				signingInfolist: [],
 				upperId: null,
+				singleLimit:0,
 				createForm: {
 					merchantName: null,
 					typePay: [],
@@ -461,6 +469,7 @@
 					data: {
 						data: {
 							merchantId: id,
+							systemCode:this.$router.history.current.query.systemCode,
 							payType: sessionStorage.getItem('typeId')
 						}
 					},
@@ -566,6 +575,7 @@
 						this.signingInfos = response.data.data.signingInfos;
 						//判断时间是否保存过
 						let limitHour = response.data.data.limitHourRules;
+						this.singleLimit=response.data.data.singleLimit;
 						if(limitHour.length > 0) {
 							for(let i = 0; i < limitHour.length; i++) {
 								if(limitHour[i].sort == 1) {
