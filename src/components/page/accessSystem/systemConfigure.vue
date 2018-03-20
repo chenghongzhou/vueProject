@@ -222,6 +222,7 @@
 						}).then((response) => {
 							this.dialogCreateVisible = false;
 							if(response.data.code == 1) {
+								this.createForm.secretFile = '';
 								this.$message({
 									message: "提交成功！",
 									type: 'success'
@@ -261,6 +262,7 @@
 						}).then((response) => {
 							this.dialogUpdateVisible = false;
 							if(response.data.code == 1) {
+								this.updateForm.secretFile = '';
 								this.$message({
 									message: "修改成功！",
 									type: 'success'

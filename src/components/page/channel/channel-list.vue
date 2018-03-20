@@ -13,10 +13,10 @@
 			<el-col :span="24" class="uinn-20">
 				<!--表单-->
 				<el-form :inline="true" :model="formInline" ref="formInline" class="demo-form-inline text-l">
-					<el-form-item label="商户名称">
+					<el-form-item label="商户名称" prop="name">
 						<el-input class="input" v-model="formInline.name"></el-input>
 					</el-form-item>
-					<el-form-item label="接入支付渠道">
+					<el-form-item label="接入支付渠道" prop="channelName">
 						<!-- <el-select class="inputs" v-model="formInline.channelId" placeholder="请选择">
 							<el-option label="全部选项" value=""></el-option>
 							<el-option v-for="item in channel" :label="item.name" :value="item.code">
@@ -34,7 +34,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-button type="primary" @click="onSubmit">查询</el-button>
-					<!-- <el-button type="primary" @click="resetForm('formInline')">重置</el-button> -->
+					 <el-button type="primary" @click="resetForm('formInline')">重置</el-button> 
 					<el-button type="primary" @click="handleAdd">新增</el-button>
 				</el-form>
 				<!--表格-->
@@ -785,8 +785,12 @@
 								"Content-Type": "multipart/form-data "
 							},
 						}).then((response) => {
-							this.secretUrl = response.data;
-							this.secretFile = '上传成功'
+							if(response.data.code == 1) {
+								this.secretUrl = response.data;
+								this.secretFile = '上传成功';
+							}else {
+								this.secretFile = '上传失败';
+							}
 						}).then((error) => this.error = error)
 					} else {
 						this.$alert('附件必须不能大于3M', '提示信息', {
@@ -815,8 +819,12 @@
 								"Content-Type": "multipart/form-data "
 							},
 						}).then((response) => {
-							this.publicUrl = response.data;
-							this.publicFile = '上传成功';
+							if(response.data.code == 1) {
+								this.publicUrl = response.data;
+								this.publicFile = '上传成功';
+							}else{
+								this.publicFile = '上传失败';
+							}
 						}).then((error) => this.error = error)
 					} else {
 						this.$alert('附件必须不能大于3M', '提示信息', {
