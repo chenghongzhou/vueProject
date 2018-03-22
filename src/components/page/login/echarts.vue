@@ -23,13 +23,13 @@
 		</el-row>
 		<el-row>
 			<el-col :span="24" class="chart chart_left">
-				<div style="position: absolute;left: 5px;top: 30px;font-size: 14px;">交易总金额：<span>{{datas.totalAmount}}</span>（元）&nbsp;&nbsp;&nbsp;&nbsp;成功交易金额：<span>{{datas.totalSuccessAmount}}</span>（元）</div>
+				<div style="position: absolute;left: 5px;top: 30px;font-size: 14px;">交易总金额：<span>{{pays.totalAmount}}</span>（元）&nbsp;&nbsp;&nbsp;&nbsp;成功交易金额：<span>{{pays.totalSuccessAmount}}</span>（元）</div>
 				<div id="payChart" style="height: 500px;"></div>
 			</el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24" class="chart chart_left">
-				<div style="position: absolute;left: 5px;top: 52px;font-size: 14px;">交易累计订单数量：<span>{{datas.totalOrderNum}}</span>（笔）&nbsp;&nbsp;&nbsp;&nbsp;成功交易订单数量：<span>{{datas.successOrderNum}}</span>（笔）</div>
+				<div style="position: absolute;left: 5px;top: 52px;font-size: 14px;">交易累计订单数量：<span>{{orders.totalOrderNum}}</span>（笔）&nbsp;&nbsp;&nbsp;&nbsp;成功交易订单数量：<span>{{orders.successOrderNum}}</span>（笔）</div>
 				<div id="countChart" style="height: 500px;"></div>
 			</el-col>
 		</el-row>
@@ -53,12 +53,14 @@
 					totalOrderNum: 0,
 					successOrderNum: 0
 				},
-				datas: {
+				pays:{
 					totalAmount: '0.00',
 					totalSuccessAmount: '0.00',
+				},
+				orders:{
 					totalOrderNum: '0',
 					successOrderNum: '0'
-				},
+				}
 			}
 		},
 		mounted() {
@@ -416,12 +418,17 @@
 				}).then((response) => {
 					if(!!response.data) {
 						const data = response.data;
-						this.baseInfo = data.ClientHomePage;
-						this.baseInfo.totalAmount = Number(data.ClientHomePage.totalAmount).toFixed(2);
-						this.baseInfo.totalSuccessAmount = Number(data.ClientHomePage.totalSuccessAmount).toFixed(2);
-						this.datas = data.AmountAndOrderNum;
-						this.datas.totalAmount = Number(data.AmountAndOrderNum.totalAmount).toFixed(2);
-						this.datas.totalSuccessAmount = Number(data.AmountAndOrderNum.totalSuccessAmount).toFixed(2);
+						this.baseInfo = data.basicsStatisticsMap;
+						this.baseInfo.totalAmount = Number(data.basicsStatisticsMap.totalMoney).toFixed(2);
+						this.baseInfo.totalSuccessAmount = Number(data.basicsStatisticsMap.successTotalMoney).toFixed(2);
+						this.baseInfo.totalOrderNum = Number(data.basicsStatisticsMap.totalOrderCount) || 0;
+						this.baseInfo.successOrderNum = Number(data.basicsStatisticsMap.successTotalOrderCount) || 0;
+						this.pays = data.daysPayAmount;
+						this.pays.totalAmount =  Number(data.daysPayAmount.todayTotalMoney).toFixed(2);
+						this.pays.totalSuccessAmount =  Number(data.daysPayAmount.todaySuccessTotalMoney).toFixed(2);
+						this.orders = data.daysPayOrder;
+						this.orders.totalOrderNum = Number(data.daysPayOrder.todayOrderCount);
+						this.orders.successOrderNum = Number(data.daysPayOrder.todaySuccessOrderCount);
 						let amountTotalArr = [0],
 							amountSucTotalArr = [0],
 							orderListTotalArr = [0],
@@ -437,23 +444,27 @@
 						}
 
 						//交易总额数据
-						data.NowTotalAmount.forEach(function(item) {
-							amountTotalArr.push(Number(item.amount).toFixed(2));
+						[].slice.call(data.daysPayAmountChart).forEach(function(value) {
+							alert(value);
+							amountTotalArr.push(Number(value).toFixed(2));
 							amountTotalArr.push(0);
 						});
+						for(var item in data.daysPayAmountChart){
+							console.log(item)
+						}
 						//交易成功数据
-						data.NowTotalSuccessAmount.forEach(function(item) {
-							amountSucTotalArr.push(Number(item.amount).toFixed(2));
+						[].slice.call(data.successDaysPayAmountChart).forEach(function(value) {
+							amountSucTotalArr.push(Number(value).toFixed(2));
 							amountSucTotalArr.push(0);
 						});
 						//订单总量数据
-						data.NowTotalOrderNum.forEach(function(item) {
-							orderListTotalArr.push(Number(item.orderNum));
+						[].slice.call(data.daysPayOrderChart).forEach(function(item) {
+							orderListTotalArr.push(Number(item));
 							orderListTotalArr.push(0);
 						});
 						//订单成功量数据
-						data.NowsuccessOrderNum.forEach(function(item) {
-							orderListSuccessArr.push(Number(item.orderNum));
+						[].slice.call(data.successDaysPayOrderChart).forEach(function(item) {
+							orderListSuccessArr.push(Number(item));
 							orderListSuccessArr.push(0);
 						});
 						option_pay.series[0].data = amountTotalArr;
