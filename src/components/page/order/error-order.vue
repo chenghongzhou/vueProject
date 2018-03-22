@@ -19,8 +19,8 @@
 					<el-form-item label="交易订单号" prop="orderNo">
 						<el-input class="input" v-model="formInline.orderNo"></el-input>
 					</el-form-item>
-					<el-form-item label="支付渠道" prop="channel_name">
-						<el-select class="input" v-model="formInline.channel_name" placeholder="请选择">
+					<el-form-item label="支付渠道" prop="channelId">
+						<el-select class="input" v-model="formInline.channelId" placeholder="请选择">
 							<el-option label="全部选项" value=""></el-option>
 							<el-option v-for="item in channel" :label="item.name" :value="item.id">
 							</el-option>
@@ -58,16 +58,13 @@
 					</el-table-column>
 					<el-table-column prop="recordNo" label="支付订单号">
 					</el-table-column>
-					<el-table-column prop="channel_name" label="支付渠道">
+					<el-table-column prop="channelName" label="支付渠道">
 					</el-table-column>
 					<el-table-column prop="payType" label="支付类型">
-						<template scope="scope">
-							支入
-						</template>
 					</el-table-column>
 					<el-table-column label="支付金额">
 						<template scope="scope">
-							{{ '￥'+Number(scope.row.record_order_amount/100).toFixed(2) || '0.00' }}
+							{{ '￥'+Number(scope.row.amount/100).toFixed(2) || '0.00' }}
 						</template>
 					</el-table-column>
 					<el-table-column prop="orderTime" :formatter="dateFormat" label="申单时间" :width="timeWidth">
@@ -129,7 +126,7 @@
 				isLoad: false,
 				formInline: {
 					orderNo: null,
-					channel_name: null,
+					channelId: null,
 					type: '1',
 					isHandler: null
 				},
@@ -178,7 +175,7 @@
 							page: pageNum,
 							pagesize: pageSize,
 							orderNo: this.formInline.orderNo,
-							channel_name: this.formInline.channel_name,
+							channelId: this.formInline.channelId,
 							type: this.formInline.type || '0',
 							isHandler: this.formInline.isHandler
 						}
