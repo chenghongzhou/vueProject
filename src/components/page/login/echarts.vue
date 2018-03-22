@@ -442,31 +442,26 @@
 								tiemArr.push(i / 2);
 							}
 						}
-
 						//交易总额数据
-						[].slice.call(data.daysPayAmountChart).forEach(function(value) {
-							alert(value);
-							amountTotalArr.push(Number(value).toFixed(2));
+						for(var i in data.daysPayAmountChart){
+							amountTotalArr.push(Number(data.daysPayAmountChart[i]).toFixed(2));
 							amountTotalArr.push(0);
-						});
-						for(var item in data.daysPayAmountChart){
-							console.log(item)
 						}
 						//交易成功数据
-						[].slice.call(data.successDaysPayAmountChart).forEach(function(value) {
-							amountSucTotalArr.push(Number(value).toFixed(2));
+						for(var i in data.successDaysPayAmountChart){
+							amountSucTotalArr.push(Number(data.successDaysPayAmountChart[i]).toFixed(2));
 							amountSucTotalArr.push(0);
-						});
+						}
 						//订单总量数据
-						[].slice.call(data.daysPayOrderChart).forEach(function(item) {
-							orderListTotalArr.push(Number(item));
+						for(var i in data.daysPayOrderChart){
+							orderListTotalArr.push(Number(data.daysPayOrderChart[i]));
 							orderListTotalArr.push(0);
-						});
+						}
 						//订单成功量数据
-						[].slice.call(data.successDaysPayOrderChart).forEach(function(item) {
-							orderListSuccessArr.push(Number(item));
+						for(var i in data.successDaysPayOrderChart){
+							orderListSuccessArr.push(Number(data.successDaysPayOrderChart[i]));
 							orderListSuccessArr.push(0);
-						});
+						}
 						option_pay.series[0].data = amountTotalArr;
 						option_pay.xAxis.data = tiemArr;
 						option_pay.series[1].data = amountSucTotalArr;
