@@ -806,6 +806,7 @@
 					padding-left: 45px;
 					padding-bottom: 20px;
 					border-top: 1px solid #ddd;
+					overflow: auto;
 					table {
 						width: 100%;
 						font-size: 14px;
