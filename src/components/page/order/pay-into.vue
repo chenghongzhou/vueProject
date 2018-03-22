@@ -75,7 +75,7 @@
 								{{ scope.$index+1 }}
 							</template>
 						</el-table-column>
-						<el-table-column prop="orderNo" label="交易订单号">
+						 <el-table-column prop="orderNo" label="交易订单号">
 							<template scope="scope">
 								{{scope.row.orderNo || '--'}}
 							</template>
@@ -85,27 +85,27 @@
 								{{scope.row.recordNo || '--'}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="merchant.merchantName" label="所属商户">
+						<el-table-column prop="clientMerchant_merchantName" label="所属商户">
 							<template scope="scope">
-								{{scope.row.merchant.merchantName || '--'}}
+								{{scope.row.clientMerchant_merchantName || '--'}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="accessSystem.name" label="所属系统">
+						<el-table-column prop="accessSystem_systemCode" label="所属系统">
 							<template scope="scope">
-								{{scope.row.accessSystem.name || '--'}}
+								{{scope.row.accessSystem_systemCode || '--'}}
 							</template>
 						</el-table-column>
-						<el-table-column prop="channel.name" label="支付渠道">
+						<el-table-column prop="channel_name" label="支付渠道">
 							<template scope="scope">
-								{{scope.row.channel.name || '--'}}
+								{{scope.row.channel_name || '--'}}
 							</template>
-						</el-table-column>
+						</el-table-column> -->
 						<!--<el-table-column label="支付类型">
 							<template scope="scope">
 								{{ scope.row.channel.businessType ==1 ? '支付收款' : '代付/提现' }}
 							</template>
 						</el-table-column>-->
-						<el-table-column label="支付金额">
+						 <el-table-column label="支付金额">
 							<template scope="scope">
 								{{ '￥'+Number(scope.row.orderAmount/100).toFixed(2) || '0.00' }}
 							</template>
@@ -341,8 +341,8 @@
 							pagesize: pageSize,
 							recordNo: this.formInline.recordNo,
 							orderNo: this.formInline.orderNo,
-							startOrderTime: this.formInline.startOrderTime,
-							endOrderTime: this.formInline.endOrderTime,
+							startOrderTime: new Date(this.formInline.startOrderTime).getTime(),
+							endOrderTime: new Date(this.formInline.endOrderTime).getTime(),
 							systemCode: this.formInline.systemCode,
 							merchantId: this.formInline.merchantId,
 							status: this.formInline.status
