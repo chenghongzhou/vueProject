@@ -24,32 +24,35 @@
 						<!-- 列表 start -->
 						<div class="table_sys" v-for="(item, key, index) in tableData" v-if="item!=''">
 							<div class="text-l pay_sys clear">
-								<div class="left" v-if="key==1">
+								<div class="left type" @click="toggle(index)" v-if="key==1">
 									<i class="icon_platform"></i>&nbsp;&nbsp;平台支付
 								</div>
-								<div class="left" v-if="key==2">
+								<div class="left type" @click="toggle(index)"  v-if="key==2">
 									<i class="icon_shortcut"></i>&nbsp;&nbsp;快捷支付
 									<span style="font-size: 12px;color: #999;">&nbsp;&nbsp;&nbsp;&nbsp;注意：您添加的开启时间段不能出现间隔，否则会导致交易失败</span>
 								</div>
-								<div class="left" v-if="key==3">
+								<div class="left type" @click="toggle(index)"  v-if="key==3">
 									<i class="icon_bank"></i>&nbsp;&nbsp;银行支付
 								</div>
-								<div class="left" v-if="key==4">
+								<div class="left type" @click="toggle(index)"  v-if="key==4">
 									<i class="icon_sao"></i>&nbsp;&nbsp;条形码支付
 								</div>
-								<div class="left" v-if="key==5">
+								<div class="left type" @click="toggle(index)"  v-if="key==5">
 									<i class="icon_payment"></i>&nbsp;&nbsp;代付
 								</div>
-								<div class="left" v-if="key==6">
+								<div class="left type" @click="toggle(index)"  v-if="key==6">
 									<i class="icon_wap"></i>&nbsp;&nbsp;网关支付
 									<span style="font-size: 12px;color: #999;">&nbsp;&nbsp;&nbsp;&nbsp;注意：您添加的开启时间段不能出现间隔，否则会导致交易失败</span>
 								</div>
-								<div class="left" v-if="key==7">
+								<div class="left type" @click="toggle(index)"  v-if="key==7">
 									<i class="icon_wang"></i>&nbsp;&nbsp;wap支付
 								</div>
-								<a href="javascript:;" class="right" @click="handleAdd(key)">+添加渠道</a>
+								<span class="right">
+									<a href="javascript:;"  @click="handleAdd(key)">+添加渠道</a>
+									<i :class="[ indexes== index &&isShow?turnDown:turnOn]" @click="toggle(index)"></i>
+								</span>
 							</div>
-							<div class="table_list">
+							<div class="table_list" v-if="isShow && indexes==index">
 								<table cellpadding="0" cellspacing="0">
 									<tr>
 										<th>
@@ -139,33 +142,36 @@
 						</div>
 						<div class="table_sys text-c" v-else>
 							<div class="text-l pay_sys clear">
-								<div class="left" v-if="key==1">
+								<div class="left type" @click="toggle(index)" v-if="key==1">
 									<i class="icon_platform"></i>&nbsp;&nbsp;平台支付
 								</div>
-								<div class="left" v-if="key==2">
+								<div class="left type" @click="toggle(index)" v-if="key==2">
 									<i class="icon_shortcut"></i>&nbsp;&nbsp;快捷支付
 									<span style="font-size: 12px;color: #999;">&nbsp;&nbsp;&nbsp;&nbsp;注意：您添加的开启时间段不能出现间隔，否则会导致交易失败</span>
 								</div>
-								<div class="left" v-if="key==3">
+								<div class="left type" @click="toggle(index)" v-if="key==3">
 									<i class="icon_bank"></i>&nbsp;&nbsp;银行支付
 								</div>
-								<div class="left" v-if="key==4">
+								<div class="left type" @click="toggle(index)"  v-if="key==4">
 									<i class="icon_sao"></i>&nbsp;&nbsp;条形码支付
 								</div>
-								<div class="left" v-if="key==5">
+								<div class="left type" @click="toggle(index)"  v-if="key==5">
 									<i class="icon_payment"></i>&nbsp;&nbsp;代付
 								</div>
-								<div class="left" v-if="key==6">
+								<div class="left type" @click="toggle(index)"  v-if="key==6">
 									<i class="icon_wap"></i>&nbsp;&nbsp;网关支付
 									<span style="font-size: 12px;color: #999;">&nbsp;&nbsp;&nbsp;&nbsp;注意：您添加的开启时间段不能出现间隔，否则会导致交易失败</span>
 								</div>
-								<div class="left" v-if="key==7">
+								<div class="left type" @click="toggle(index)"  v-if="key==7">
 									<i class="icon_wang"></i>&nbsp;&nbsp;wap支付
 								</div>
-								<a href="javascript:;" class="right" @click="handleAdd(key)">+添加渠道</a>
+								<span class="right">
+									<a href="javascript:;"  @click="handleAdd(key)">+添加渠道</a>
+									<i :class="[ indexes== index &&isShow?turnDown:turnOn]" @click="toggle(index)"></i>
+								</span>
 							</div>
 
-							<div class="table_list">
+							<div class="table_list" v-if="isShow && indexes==index">
 								<table cellpadding="0" cellspacing="0">
 									<tr style="height: 100px;">
 										<td colspan="8">
@@ -313,6 +319,10 @@
 			return {
 				operateWidth: '180',
 				timeWidth: '173',
+				indexes: 0,
+				turnOn: 'icon_turn_jt',
+				turnDown: 'icon_turn_jb',
+				isShow: false,
 				detailInfo: {
 					accessSystem: {},
 					channel: {},
@@ -347,7 +357,7 @@
 				isLimitHour: false,
 				signingInfolist: [],
 				upperId: null,
-				singleLimit:0,
+				singleLimit: 0,
 				createForm: {
 					merchantName: null,
 					typePay: [],
@@ -386,6 +396,9 @@
 			this.show = true;
 			this.showDetail = false;
 			this.getLoadData();
+			if(this.indexes==0) {
+				this.isShow=true;
+			}
 		},
 		methods: {
 			//时间格式化  
@@ -469,7 +482,7 @@
 					data: {
 						data: {
 							merchantId: id,
-							systemCode:this.$router.history.current.query.systemCode,
+							systemCode: this.$router.history.current.query.systemCode,
 							payType: sessionStorage.getItem('typeId')
 						}
 					},
@@ -575,7 +588,7 @@
 						this.signingInfos = response.data.data.signingInfos;
 						//判断时间是否保存过
 						let limitHour = response.data.data.limitHourRules;
-						this.singleLimit=response.data.data.singleLimit;
+						this.singleLimit = response.data.data.singleLimit;
 						if(limitHour.length > 0) {
 							for(let i = 0; i < limitHour.length; i++) {
 								if(limitHour[i].sort == 1) {
@@ -615,19 +628,19 @@
 			createConfig() {
 				let limitAmountVosObj = {};
 				this.limitAmountVosArr = [];
-				let reg = /^\+?[1-9][0-9]*$/;
+//				let reg = /^\+?[1-9][0-9]*$/;
 
 				for(let i = 0; i < this.signingInfos.length; i++) {
 					limitAmountVosObj = {
 						signingInfoId: this.signingInfos[i].id,
 						amount: this.signingInfos[i].upperBound || this.upperId
 					}
-					if(!reg.test(this.signingInfos[i].upperBound)) {
-						this.$alert('请输入正整数', '提示信息', {
-							confirmButtonText: '确定'
-						});
-						return false;
-					}
+//					if(!reg.test(this.signingInfos[i].upperBound)) {
+//						this.$alert('请输入正整数', '提示信息', {
+//							confirmButtonText: '确定'
+//						});
+//						return false;
+//					}
 					this.limitAmountVosArr.push(limitAmountVosObj);
 				}
 				let limitHourVo = {};
@@ -666,6 +679,15 @@
 				this.show = true;
 				this.showDetail = false;
 				this.$router.go(1);
+			},
+			toggle(j) {
+				this.indexes = j;
+				this.isShow = !this.isShow;
+				if(this.isShow) {
+					this.indexes != j;
+				} else {
+					this.indexes = j;
+				}
 			}
 		},
 		components: {
@@ -676,6 +698,31 @@
 <style type="text/css" lang="scss">
 	@import '../../../assets/css/common.scss';
 	.systemDeploy {
+		.type {
+			width: 86%;
+			height: 40px;
+			cursor: pointer;
+		}
+		.icon_turn_jt {
+			display: inline-block;
+			cursor: pointer;
+			width: 20px;
+			height: 14px;
+			margin-left: 10px;
+			margin-top: 4px;
+			vertical-align: middle;
+			background: url(../../../assets/img/icon-sprite.png) -255px -112px no-repeat;
+		}
+		.icon_turn_jb {
+			display: inline-block;
+			width: 20px;
+			height: 14px;
+			cursor: pointer;
+			margin-left: 10px;
+			margin-top: 4px;
+			vertical-align: middle;
+			background: url(../../../assets/img/icon-sprite.png) -255px -133px no-repeat;
+		}
 		.system_deploy {
 			.top_sys {
 				height: 40px;
@@ -694,8 +741,8 @@
 				.pay_sys {
 					font-size: 14px;
 					color: #666;
-					padding: 10px 15px;
-					border-bottom: 1px solid #ddd;
+					line-height: 40px;
+					padding: 0px 15px;
 					.icon_shortcut {
 						display: inline-block;
 						width: 21px;
@@ -758,6 +805,8 @@
 					padding-right: 20px;
 					padding-left: 45px;
 					padding-bottom: 20px;
+					border-top: 1px solid #ddd;
+					overflow: auto;
 					table {
 						width: 100%;
 						font-size: 14px;
