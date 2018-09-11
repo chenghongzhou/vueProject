@@ -15,6 +15,23 @@
 						<i class="icon-pwd"></i>
 						<el-input placeholder="请输入身份证号码" v-model="regForm.idCard"></el-input>
 					</el-form-item>
+
+					<el-form-item class="reg-cont-item" prop="idCard">
+						<i class="icon-pwd"></i>
+						<el-input placeholder="请输入邮箱地址" v-model="regForm.idCard"></el-input>
+					</el-form-item>
+					<div class="reg-cont-send">
+						<el-form-item class="left reg-message" prop="phoneCode"><i class="icon-pwd"></i>
+							<el-input @keyup.enter.native="submitForm('regForm')" type="text" placeholder="请输入邮箱验证码" v-model="regForm.phoneCode"></el-input>
+						</el-form-item>
+						<div class="left">
+							<a href="javascript:;" class="set-pwd" @click="regForm.flag && getvalite()">
+								<span v-if="regForm.sendMsgDisabled">{{regForm.time+'秒后获取'}}</span>
+								<span v-if="!regForm.sendMsgDisabled">获取验证码</span>
+							</a>
+						</div>
+					</div>
+
 					<el-form-item class="reg-cont-item reg-message" prop="companyName">
 						<i class="icon-message"></i>
 						<el-input placeholder="请输入机构名称" v-model="regForm.companyName"></el-input>

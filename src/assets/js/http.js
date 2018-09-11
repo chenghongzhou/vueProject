@@ -39,7 +39,7 @@ function errorState(response) {
 
 function successState(res) {
 	//统一判断后端返回的错误码  
-	if(res.data.code != undefined || res.data.code != null) {
+	if(res.code != undefined || res.code != null) {
 		if(res.data.code == 1) {
 			return res;
 		} else if(res.data.code == 502 || res.data.code == 503) {
